@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 
 export function App() {
@@ -5,15 +6,9 @@ export function App() {
     const [text, setText] = useState("");
 
     function handleSubmit() {
-        fetch(import.meta.env.VITE_SERVER_URL, {
-            method: "POST",
-            body: JSON.stringify({ name: name }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((response) => response.json())
-            .then((response) => setText(`Response: ${response.text}`))
+        axios
+            .post("/", { name: name })
+            .then((response) => setText(`Response: ${response.data.text}`))
             .catch((reason) => setText(`Error: ${reason}`));
     }
 
