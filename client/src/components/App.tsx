@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { IMessage } from "../models/IMessage";
 
@@ -10,17 +10,18 @@ export function App() {
     function getMessages() {
         axios
             .get("/messages")
-            .then((response) => setMessages(response.data))
-            .catch((reason) => setError(reason));
+            .then((response: AxiosResponse<IMessage[]>) => setMessages(response.data))
+            .catch((error: AxiosError) => setError(error.message));
     }
 
     function handleSendMessage() {
+        setError("");
         setText("");
 
         axios
             .post("/messages", { text: text })
             .then(() => getMessages())
-            .catch((reason) => setError(reason));
+            .catch((error: AxiosError) => setError(error.message));
     }
 
     useEffect(() => getMessages(), []);
