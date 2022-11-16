@@ -7,6 +7,7 @@ import { Register } from "./routes/Register";
 import { Login } from "./routes/Login";
 
 axios.defaults.baseURL = import.meta.env.VITE_SERVER_URL;
+axios.defaults.withCredentials = true;
 
 const router = createBrowserRouter([
     {
