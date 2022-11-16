@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { FormEvent, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export function Login() {
     const [name, setName] = useState("");
@@ -8,9 +8,9 @@ export function Login() {
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
-    function handleLogin() {
+    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
         setMessage("");
-
         axios
             .post("/user/login", { name: name, password: password })
             .then(() => navigate("/"))
@@ -20,18 +20,26 @@ export function Login() {
     return (
         <>
             <h1>Login</h1>
-            <div>
-                <label>
-                    Name: <input value={name} onChange={(event) => setName(event.target.value)} />
-                </label>
-            </div>
-            <div>
-                <label>
-                    Password:{" "}
-                    <input value={password} type="password" onChange={(event) => setPassword(event.target.value)} />
-                </label>
-            </div>
-            <button onClick={handleLogin}>Login</button>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>
+                        Name: <input name="name" value={name} onChange={(event) => setName(event.target.value)} />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        Password:{" "}
+                        <input
+                            name="password"
+                            value={password}
+                            type="password"
+                            onChange={(event) => setPassword(event.target.value)}
+                        />
+                    </label>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <Link to="/register">Register</Link>
             <p>{message}</p>
         </>
     );
