@@ -7,8 +7,8 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Message {
-    id   Int      @id @default(autoincrement())
-    text String
-    time DateTime
+model User {
+    id       String @id @default(uuid())
+    name     String
+    password String
 }
