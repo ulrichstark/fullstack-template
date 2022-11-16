@@ -1,6 +1,7 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { axiosClient } from "../axiosClient";
 
 export function Register() {
     const [name, setName] = useState("");
@@ -11,7 +12,8 @@ export function Register() {
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setMessage("");
-        axios
+
+        axiosClient
             .post("/user/register", { name: name, password: password })
             .then(() => navigate("/"))
             .catch((error: AxiosError<any>) => setMessage(error.response?.data ?? error.message));
@@ -23,17 +25,19 @@ export function Register() {
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>
-                        Name: <input name="name" value={name} onChange={(event) => setName(event.target.value)} />
+                        Name
+                        <input name="name" value={name} onChange={(event) => setName(event.target.value)} required />
                     </label>
                 </div>
                 <div>
                     <label>
-                        Password:{" "}
+                        Password
                         <input
                             name="password"
                             value={password}
                             type="password"
                             onChange={(event) => setPassword(event.target.value)}
+                            required
                         />
                     </label>
                 </div>

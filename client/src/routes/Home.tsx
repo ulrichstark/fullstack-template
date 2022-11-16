@@ -1,6 +1,7 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { axiosClient } from "../axiosClient";
 
 export function Home() {
     const [loading, setLoading] = useState(true);
@@ -9,7 +10,7 @@ export function Home() {
     function getUserName() {
         setLoading(true);
 
-        axios
+        axiosClient
             .get("/user/me")
             .then((response: AxiosResponse<string>) => setUserName(response.data))
             .catch(() => setUserName(null))
@@ -17,7 +18,7 @@ export function Home() {
     }
 
     function handleLogout() {
-        axios.post("/user/logout").then(() => getUserName());
+        axiosClient.post("/user/logout").then(() => getUserName());
     }
 
     useEffect(() => getUserName(), []);
