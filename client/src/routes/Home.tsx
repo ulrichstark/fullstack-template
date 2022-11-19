@@ -1,10 +1,12 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { SessionContext } from "../App";
 import { axiosClient } from "../axiosClient";
 
 export function Home() {
+    const session = useContext(SessionContext);
     const queryClient = useQueryClient();
-    const { isLoading, isError, data } = useQuery(["/user/me"], () => axiosClient.get<string | null>("/user/me"));
 
     function handleLogout() {
         axiosClient.post("/user/logout").then(() => {
@@ -15,18 +17,14 @@ export function Home() {
     return (
         <>
             <h1>Home</h1>
-            {isLoading ? (
-                <p>Loading...</p>
-            ) : isError ? (
-                <p>Error</p>
-            ) : data.data === null ? (
+            {session ? (
                 <div>
-                    <Link to="/register">Register</Link> - <Link to="/login">Login</Link>
+                    <p>{session.user.name}</p>
+                    <button onClick={handleLogout}>Logout</button>
                 </div>
             ) : (
                 <div>
-                    <p>{data.data}</p>
-                    <button onClick={handleLogout}>Logout</button>
+                    <Link to="/register">Register</Link> - <Link to="/login">Login</Link>
                 </div>
             )}
         </>

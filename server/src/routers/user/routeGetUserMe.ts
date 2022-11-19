@@ -9,5 +9,5 @@ export async function routeGetUserMe(req: Request, res: Response) {
         return;
     }
 
-    res.send(session.user.name);
+    res.send({ id: session.id, user: { name: session.user.name } });
 }

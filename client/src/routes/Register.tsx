@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,6 +9,7 @@ export function Register() {
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -15,7 +17,10 @@ export function Register() {
 
         axiosClient
             .post("/user/register", { name: name, password: password })
-            .then(() => navigate("/"))
+            .then(() => {
+                queryClient.invalidateQueries(["/user/me"]);
+                navigate("/");
+            })
             .catch((error: AxiosError<any>) => setMessage(error.response?.data ?? error.message));
     }
 
