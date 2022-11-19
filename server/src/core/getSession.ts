@@ -17,7 +17,6 @@ export async function getSession(req: Request) {
     }
 
     const now = new Date();
-
     if (now.getTime() > session.timeExpiry.getTime()) {
         return null;
     }

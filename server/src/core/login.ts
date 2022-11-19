@@ -10,6 +10,7 @@ export async function login(res: Response, user: User) {
     res.cookie("session", session.id, {
         maxAge: maxAge,
         secure: true,
+        httpOnly: true,
         sameSite: "strict",
     });
 

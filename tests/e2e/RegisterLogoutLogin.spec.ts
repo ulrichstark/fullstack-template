@@ -3,8 +3,9 @@ import { test, expect } from "@playwright/test";
 test("register, logout and login with random user", async ({ page }) => {
     await page.goto("/");
 
-    const name = `user-${Math.round(Math.random() * 100000).toString()}`;
-    const password = `password-${Math.round(Math.random() * 100000).toString()}`;
+    const uniqueId = `${Date.now()}-${Math.round(Math.random() * 1000)}`;
+    const name = `user-${uniqueId}`;
+    const password = `password-${uniqueId}`;
 
     // Home Screen
     await expect(page.getByRole("heading")).toHaveText("Home");
