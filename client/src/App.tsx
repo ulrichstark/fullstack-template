@@ -8,7 +8,7 @@ import { router } from "./router";
 export const SessionContext = createContext<Session | null>(null);
 
 export function App() {
-    const result = useQuery(["/user/me"], () => axiosClient.get<Session | null>("/user/me"));
+    const result = useQuery(["session"], () => axiosClient.get<Session | null>("/session"));
     const session = result.data?.data ?? null;
 
     return (

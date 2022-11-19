@@ -16,9 +16,9 @@ export function Register() {
         setMessage("");
 
         axiosClient
-            .post("/user/register", { name: name, password: password })
+            .post("/user", { name: name, password: password })
             .then(() => {
-                queryClient.invalidateQueries(["/user/me"]);
+                queryClient.invalidateQueries(["session"]);
                 navigate("/");
             })
             .catch((error: AxiosError<any>) => setMessage(error.response?.data ?? error.message));

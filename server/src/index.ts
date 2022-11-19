@@ -5,6 +5,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { routerUser } from "./routers/user/routerUser";
+import { routerSession } from "./routers/session/routerSession";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/user", routerUser);
+app.use("/session", routerSession);
 
 app.listen(process.env.SERVER_PORT, () => {
     console.log(`Server listening on :${process.env.SERVER_PORT}`);

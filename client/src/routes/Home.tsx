@@ -9,8 +9,8 @@ export function Home() {
     const queryClient = useQueryClient();
 
     function handleLogout() {
-        axiosClient.post("/user/logout").then(() => {
-            queryClient.invalidateQueries(["/user/me"]);
+        axiosClient.delete("/session").then(() => {
+            queryClient.invalidateQueries(["session"]);
         });
     }
 

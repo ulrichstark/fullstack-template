@@ -3,7 +3,7 @@ import { prismaClient } from "../../prismaClient";
 import httpStatus from "http-status";
 import { getSession } from "../../core/getSession";
 
-export async function routePostUserLogout(req: Request, res: Response) {
+export async function routeDeleteSession(req: Request, res: Response) {
     const session = await getSession(req);
 
     if (!session) {
@@ -15,5 +15,5 @@ export async function routePostUserLogout(req: Request, res: Response) {
     await prismaClient.session.update({ where: { id: session.id }, data: { timeExpiry: new Date(0) } });
 
     res.clearCookie("session");
-    res.send("Logout successful");
+    res.send("Session deleted");
 }

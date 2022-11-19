@@ -16,9 +16,9 @@ export function Login() {
         setMessage("");
 
         axiosClient
-            .post("/user/login", { name: name, password: password })
+            .post("/session", { name: name, password: password })
             .then(() => {
-                queryClient.invalidateQueries(["/user/me"]);
+                queryClient.invalidateQueries(["session"]);
                 navigate("/");
             })
             .catch((error: AxiosError<any>) => setMessage(error.response?.data ?? error.message));

@@ -4,7 +4,7 @@ import httpStatus from "http-status";
 import bcrypt from "bcrypt";
 import { login } from "../../core/login";
 
-export async function routePostUserRegister(req: Request, res: Response) {
+export async function routePostUser(req: Request, res: Response) {
     let { name, password } = req.body;
 
     if (!name || !password) {
