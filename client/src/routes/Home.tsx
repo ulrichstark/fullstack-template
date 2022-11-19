@@ -1,40 +1,31 @@
-import { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { axiosClient } from "../axiosClient";
 
 export function Home() {
-    const [loading, setLoading] = useState(true);
-    const [userName, setUserName] = useState<string | null>(null);
-
-    function getUserName() {
-        setLoading(true);
-
-        axiosClient
-            .get("/user/me")
-            .then((response: AxiosResponse<string>) => setUserName(response.data))
-            .catch(() => setUserName(null))
-            .finally(() => setLoading(false));
-    }
+    const queryClient = useQueryClient();
+    const { isLoading, isError, data } = useQuery(["/user/me"], () => axiosClient.get<string | null>("/user/me"));
 
     function handleLogout() {
-        axiosClient.post("/user/logout").then(() => getUserName());
+        axiosClient.post("/user/logout").then(() => {
+            queryClient.invalidateQueries(["/user/me"]);
+        });
     }
-
-    useEffect(() => getUserName(), []);
 
     return (
         <>
             <h1>Home</h1>
-            {loading ? (
+            {isLoading ? (
                 <p>Loading...</p>
-            ) : userName === null ? (
+            ) : isError ? (
+                <p>Error</p>
+            ) : data.data === null ? (
                 <div>
                     <Link to="/register">Register</Link> - <Link to="/login">Login</Link>
                 </div>
             ) : (
                 <div>
-                    <p>{userName}</p>
+                    <p>{data.data}</p>
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             )}
