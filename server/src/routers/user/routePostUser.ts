@@ -3,24 +3,16 @@ import { prismaClient } from "../../prismaClient";
 import httpStatus from "http-status";
 import bcrypt from "bcrypt";
 import { login } from "../../core/login";
+import { getParameterString } from "../../util/getParameterString";
+import { HttpError } from "../../models/HttpError";
 
 export async function routePostUser(req: Request, res: Response) {
-    let { name, password } = req.body;
-
-    if (!name || !password) {
-        res.status(httpStatus.BAD_REQUEST);
-        res.send(`'name' and 'password' are required`);
-        return;
-    }
-
-    name = name.trim();
-    password = password.trim();
+    const name = getParameterString(req, "name");
+    const password = getParameterString(req, "password");
 
     const userWithSameName = await prismaClient.user.findFirst({ where: { name: name } });
     if (userWithSameName) {
-        res.status(httpStatus.BAD_REQUEST);
-        res.send(`User '${name}' already exists`);
-        return;
+        throw new HttpError(httpStatus.BAD_REQUEST, `User '${name}' already exists`);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
